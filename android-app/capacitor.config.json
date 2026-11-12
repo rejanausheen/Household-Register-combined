@@ -1,0 +1,7 @@
+{
+  "appId": "com.helpbook.register",
+  "appName": "Help Register",
+  "webDir": "www",
+  "server": { "androidScheme": "https" },
+  "android": { "allowMixedContent": false }
+}

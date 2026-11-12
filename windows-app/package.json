@@ -1,0 +1,26 @@
+{
+  "name": "household-help-register",
+  "productName": "Household Help Register",
+  "version": "1.0.0",
+  "description": "Attendance, payments, chores, events and journal for household help",
+  "main": "main.js",
+  "author": "Household Help Register",
+  "scripts": {
+    "www": "node copy-www.js",
+    "start": "node copy-www.js && electron .",
+    "dist": "node copy-www.js && electron-builder --win --publish never"
+  },
+  "devDependencies": {
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.helpbook.register",
+    "productName": "Household Help Register",
+    "directories": { "output": "dist", "buildResources": "build" },
+    "files": ["main.js", "www/**/*"],
+    "win": { "icon": "build/icon.ico", "target": [ { "target": "nsis", "arch": ["x64"] }, { "target": "portable", "arch": ["x64"] } ] },
+    "nsis": { "oneClick": false, "allowToChangeInstallationDirectory": true, "createDesktopShortcut": true, "createStartMenuShortcut": true, "shortcutName": "Household Help Register" },
+    "artifactName": "HouseholdHelpRegister-${version}-${arch}.${ext}"
+  }
+}

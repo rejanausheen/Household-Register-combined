@@ -1,0 +1,16 @@
+{
+  "name": "household-help-register-android",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": { "www": "node copy-www.js" },
+  "dependencies": {
+    "@aparajita/capacitor-biometric-auth": "^9.0.0",
+    "@capacitor/android": "^6.1.2",
+    "@capacitor/app": "^6.0.1",
+    "@capacitor/core": "^6.1.2"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^6.1.2"
+  }
+}

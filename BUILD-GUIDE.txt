@@ -1,0 +1,73 @@
+HOUSEHOLD HELP REGISTER - WINDOWS INSTALLER AND ANDROID APK
+===========================================================
+What is in this folder
+  www/            the app itself (the same app as the website version)
+  windows-app/    Windows project (Electron)  -> builds a Setup .exe and a portable .exe
+  android-app/    Android project (Capacitor) -> builds an .apk you can install on a phone
+  .github/workflows/   two ready-made "build buttons" for GitHub (easiest way, nothing to install)
+
+IMPORTANT: these projects have not been built or run by their author. The first build may need a
+small fix (for example a newer version number in package.json). Tell me the error text and I will fix it.
+
+-----------------------------------------------------------------------------------------
+OPTION A (EASIEST): LET GITHUB BUILD THEM FOR YOU - NO TOOLS TO INSTALL
+-----------------------------------------------------------------------------------------
+1. On github.com create a NEW repository, for example "helpbook-native". Private is fine.
+2. Upload everything in this folder to it, keeping the folders:  www, windows-app, android-app
+   and the hidden folder  .github/workflows  (with the two .yml files).
+   If your computer will not drag the hidden .github folder, click "Add file > Create new file"
+   on GitHub, type   .github/workflows/build-windows.yml   as the name, and paste the contents of
+   that file. Do the same for build-android.yml.
+3. Open the repository's "Actions" tab. Click "Build Windows installer" > "Run workflow".
+   Do the same for "Build Android APK". (If asked, click "I understand my workflows, enable them".)
+4. Wait about 5 to 15 minutes. Open the finished run and scroll to "Artifacts":
+     HouseholdHelpRegister-Windows  -> contains Setup .exe and a portable .exe
+     HouseholdHelpRegister-Android  -> contains app-debug.apk
+   Click each to download (they arrive as a zip).
+
+-----------------------------------------------------------------------------------------
+OPTION B: BUILD ON YOUR OWN COMPUTER
+-----------------------------------------------------------------------------------------
+WINDOWS INSTALLER  (needs Node.js 20 or newer from nodejs.org, on a Windows computer)
+  1. Open a Command Prompt inside the windows-app folder.
+  2. npm install
+  3. npm run dist
+  4. The files appear in windows-app\dist\
+  To just try it without building an installer:  npm start
+
+ANDROID APK  (needs Node.js 20+, Java JDK 17, and Android Studio with its SDK)
+  1. Open a terminal inside the android-app folder.
+  2. npm install
+  3. node copy-www.js
+  4. npx cap add android
+  5. npx capacitor-assets generate --android
+  6. Open android\app\src\main\AndroidManifest.xml and, just before </manifest>, add:
+       <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+       <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  7. npx cap sync android
+  8. cd android   then   gradlew assembleDebug      (Windows)   or   ./gradlew assembleDebug
+  9. The APK is at android\app\build\outputs\apk\debug\app-debug.apk
+  (Or run "npx cap open android" and use Build > Build APK in Android Studio.)
+
+-----------------------------------------------------------------------------------------
+INSTALLING
+-----------------------------------------------------------------------------------------
+Windows: run the Setup .exe. Windows may show a blue "Windows protected your PC" screen because the
+  installer is not signed by a paid certificate. Click "More info" then "Run anyway".
+  The "portable" .exe runs without installing.
+Android: copy app-debug.apk to the phone and open it. Android will ask you to allow installing from
+  this source ("Install unknown apps"); allow it for your file manager or browser. Then open "Help Register".
+
+-----------------------------------------------------------------------------------------
+GOOD TO KNOW
+-----------------------------------------------------------------------------------------
+* Your data is NOT shared with the website version or the browser-installed version. Each app keeps
+  its own copy. To move data over, use Settings > Backup and restore, or turn on Sync (Settings >
+  Sync across devices) with the same address and key in every app.
+* Windows app: the fingerprint option is not available (PIN works). "Use my current location" for the
+  weather may not work; search for your city instead.
+* Android app: fingerprint / face unlock uses the phone's own security (a fingerprint or screen lock
+  must be set up on the phone). The Exit button closes the app after saving.
+* To update later: upload a new www/index.html to the repository, then run the build buttons again and
+  install the new files over the old ones (your data stays).
+* The Android file is a "debug" build: fine for your own phones. It is not for the Play Store.
