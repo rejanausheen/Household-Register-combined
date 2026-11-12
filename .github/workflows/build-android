@@ -1,0 +1,31 @@
+name: Build Android APK
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: android-app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - run: npm install
+      - run: node copy-www.js
+      - run: npx cap add android
+      - run: npx capacitor-assets generate --android
+      - name: Let the weather location button ask for location
+        run: sed -i 's#</manifest>#    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />\n    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />\n</manifest>#' android/app/src/main/AndroidManifest.xml
+      - run: npx cap sync android
+      - run: ./gradlew assembleDebug
+        working-directory: android-app/android
+      - uses: actions/upload-artifact@v4
+        with:
+          name: HouseholdHelpRegister-Android
+          path: android-app/android/app/build/outputs/apk/debug/*.apk
